@@ -6,8 +6,8 @@ queue = []
 dismissed = []
 admitted = []
 
-ailments_file = open('ailments.json', 'r')
-ailments = json.loads(ailments_file)
+#ailments_file = open('ailments.json', 'r')
+#ailments = json.loads(ailments_file)
 time = 0
 end_game = 60
 patients_per_hour = 5
