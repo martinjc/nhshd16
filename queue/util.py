@@ -72,7 +72,7 @@ def dismiss_patient(id):
 
 def game_state():
   state = {}
-  state['state'] = 'in play' if (time < end_game or len(queue) > 0) else 'ended'
+  state['state'] = 'in play' if (time < end_game and len(queue) > 0) else 'ended'
   state['time'] = time
   state['total_time'] = end_game
   state['admitted'] = len(admitted)
