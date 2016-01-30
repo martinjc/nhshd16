@@ -13,12 +13,12 @@ public class PatientPreview : MonoBehaviour {
 	[SerializeField]
 	private Text gender;
 
-	public Image Photo{
+	public Sprite Photo{
 		get{
-			return image;
+			return image.sprite;
 		}
 		set{
-			//Set image
+			image.sprite = value;
 		}
 	}
 
