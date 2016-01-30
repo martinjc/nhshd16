@@ -55,8 +55,7 @@
     "ailment_deadline": -1,
     "symptoms": [
        {"name": "Headache", "prob": 1.0},
-       {"name": "Photophobia", "prob": 0.6},
-       {"name": "High Temperature", "prob": 0.1}
+       {"name": "Photophobia", "prob": 0.6}
     ]
   },
   {

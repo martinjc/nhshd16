@@ -20,12 +20,12 @@ def next_patient():
 @app.route('/patients/<id>/<action>', methods=['POST'])
 def edit(id, action):
   if action == 'dismiss':
-    dismiss_patient(id)
+    return dismiss_patient(id)
   elif action == 'defer':
-    defer_patient(id)
+    return defer_patient(id)
   elif action == 'admit':
-    admit_patient(id) 
-  return 'OK'
+    return admit_patient(id) 
+  return {'Error': True}
 
 if __name__ == '__main__':
     app.debug = True

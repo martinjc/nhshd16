@@ -2,6 +2,7 @@ import json, random
 from patient_gen import generate_patient
 
 all_patients = {}
+beds = []
 queue = []
 dismissed = []
 admitted = []
@@ -11,6 +12,8 @@ time = 0
 patients_to_generate = 60
 end_game = 60*12
 patients_per_hour = 5
+bed_limit = 10
+bed_decay = 36
 
 
 def reset_time():
@@ -29,6 +32,9 @@ def get_next_patient():
     time += 12
     patient_id = queue.pop()
     patient = all_patients[patient_id]
+  
+    if time % bed_decay == 0 and len(beds) > 0:
+      beds.pop()
 
     if 'arrival_time' not in patient:
       patient['arrival_time'] = time
@@ -44,13 +50,25 @@ def get_next_patient():
     
 
 def defer_patient(id):
-  queue.insert(patients_per_hour*2, all_patients[id]) # defer 2 hours
+  try:
+    queue.insert(patients_per_hour*2, id) # defer 2 hours
+  except:
+    pass
+  return {'OK': True}
 
 def admit_patient(id):
-  admitted.append(all_patients[id])
+  if len(beds) < bed_limit:
+    beds.append(id)
+    admitted.append(id)
+
+  if len(beds) >= bed_limit:
+    return {'beds_full': True}
+  else:
+    return {'beds_full': False}
 
 def dismiss_patient(id):
-  dismissed.append(all_patients[id])
+  dismissed.append(id)
+  return {'OK': True}
 
 def game_state():
   state = {}
@@ -59,6 +77,8 @@ def game_state():
   state['total_time'] = end_game
   state['admitted'] = len(admitted)
   state['dismissed'] = len(dismissed)
+  state['total_beds'] = bed_limit
+  state['used_beds'] = len(beds)
   
   if time >= end_game or len(queue) == 0:
     state['dead'] = len(dead)   
