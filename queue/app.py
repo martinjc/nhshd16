@@ -1,4 +1,5 @@
 from flask import Flask
+from util import *
 
 app = Flask(__name__)
 
@@ -8,7 +9,12 @@ def get_next_patient():
 
 @app.route('/patient/<id>/<action>', methods=['POST'])
 def edit(id, action):
-  pass
+  if action == 'dismiss':
+    dismiss_patient(id)
+  elif action == 'defer':
+    defer_patient(id)
+  elif action == 'accept':
+    accept_patient(id) 
 
 if __name__ == '__main__':
     app.debug = True
