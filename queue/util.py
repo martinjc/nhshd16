@@ -1,4 +1,5 @@
 import json, random
+from patient_gen import generate_patient
 
 all_patients = {}
 queue = []
@@ -14,12 +15,12 @@ patients_per_hour = 5
 
 def reset_time():
   time = 0
-  #queue = geneate_patient_queue(patients_to_generate) 
   patients = [{'name':'fred'}, {'name':'ben'}, {'name': 'lisa'}]
-  for i, patient in enumerate(patients): 
+  for i in range(patients_to_generate): 
+    patient = dict(generate_patient())
     patient['id'] = str(i)
     all_patients[str(i)] = patient
-    queue.append(patient)
+    queue.append(patient['id'])
 
 def get_next_patient():  
   global time
@@ -27,7 +28,7 @@ def get_next_patient():
   if time < end_game and len(queue) > 0:
     time += 12
     patient_id = queue.pop()
-    patient = all_patients[patiend_id]
+    patient = all_patients[patient_id]
 
     if 'arrival_time' not in patient:
       patient['arrival_time'] = time
@@ -61,6 +62,6 @@ def game_state():
   
   if time >= end_game or len(queue) == 0:
     state['dead'] = len(dead)   
-    state['score'] = patients_to_generate - len(data)
+    state['score'] = patients_to_generate - len(dead)
    
   return state
