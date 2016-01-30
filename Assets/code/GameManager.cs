@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 
 	private Patient currentPatient;
 
-	private string DEBUG_HOST = 10.184.5.117:5000;
+	private const string DEBUG_HOST = "10.184.5.117:5000";
 
 	public void StartGame(){
 		//Run any timer logic or shiiiit here
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour {
 		string aspect = "patients";
 		string method = "next";
 		string url = DEBUG_HOST + "/" + aspect + "/" + method;
-		string jsonString = CallEndpoint (url);
+		//MARTIN: string jsonString = CallEndpoint (url);
 
 		//currentPatient = JsonUtility.FromJson<Patient> (jsonString);
 		currentPatient = DebugGenerateTestPatient ();
@@ -54,15 +54,14 @@ public class GameManager : MonoBehaviour {
 	private void ProcessPatient(string action) {
 		string aspect = "patients";
 		string url = DEBUG_HOST + "/" + aspect + "/" + currentPatient.ID + "/" + action;
-		CallEndpoint (url);
+		StartCoroutine(CallEndpoint (url));
 	}
 
-	private void CallEndpoint(string url) {
-		IEnumerator Start() {
-			WWW www = new WWW(url);
-			yield return www;
-			string jsonString = www.text;
-			return jsonString;
+	IEnumerator CallEndpoint(string url) {
+		WWW www = new WWW(url);
+		yield return www;
+		string jsonString = www.text;
+		//MARTIN: return jsonString;
 	}
 
 	void Reset(){
