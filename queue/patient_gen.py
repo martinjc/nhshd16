@@ -42,7 +42,7 @@ age2range = {
 def generate_skeleton():
     photo_row = load_people().reset_index().sample(n=1)
     photo_fname = tuple(photo_row.loc[:,'filename'])[0]
-    photo_fp = os.path.join('dat_people/images/', photo_fname)
+    photo_fp = photo_fname
 
     sex = photo_row.loc[:,'sex']
     sex = tuple(sex)[0].lower()
