@@ -48,4 +48,5 @@ public class PatientPreview : MonoBehaviour {
 			gender.text = value;
 		}
 	}
+
 }

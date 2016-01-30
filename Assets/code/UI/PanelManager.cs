@@ -9,6 +9,8 @@ public class PanelManager : MonoBehaviour
 
 	public Transform PanelPatient;
 	public Transform PanelStart;
+	public Transform PanelDiagnose;
+	public Transform PanelHandbook;
 
 	public static PanelManager _instance;
 
@@ -59,5 +61,13 @@ public class PanelManager : MonoBehaviour
 
 	public void ShowPanelPatient(){
 		Show (PanelPatient);
+	}
+
+	public void ShowPanelDiagnose(){
+		Show (PanelDiagnose);
+	}
+
+	public void ShowPanelHandbook(){
+		Show (PanelHandbook);
 	}
 }

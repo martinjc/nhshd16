@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	private PanelPatient panelPatient;
 
+	[SerializeField]
+	private PanelDiagnose panelDiagnose;
+
 	private Patient currentPatient;
 
 	private const string DEBUG_HOST = "10.184.5.117:5000";
@@ -55,7 +58,10 @@ public class GameManager : MonoBehaviour {
 
 	IEnumerator CallPatientCreationEndpoint(string url) {
 		currentPatient = DebugGenerateTestPatient ();
+
 		panelPatient.Populate (currentPatient);
+		panelDiagnose.patient = currentPatient;
+
 
 		WWW www = new WWW(url);
 		yield return www;

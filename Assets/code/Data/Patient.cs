@@ -14,4 +14,16 @@ public class Patient{
 	public string AilmentName;
 	public List<string> Symptoms;
 
+	private Sprite icon;
+	public Sprite Icon{
+		get{
+			if(icon == null){
+				if(PhotoFilename != null){
+					icon = Resources.Load("faces/" + PhotoFilename, typeof(Sprite)) as Sprite;
+				}
+			}
+			return icon;
+		}
+	}
+
 }
