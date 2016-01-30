@@ -26,14 +26,15 @@ def get_next_patient():
   
   if time < end_game and len(queue) > 0:
     time += 12
-    patient = queue.pop()
+    patient_id = queue.pop()
+    patient = all_patients[patiend_id]
 
     if 'arrival_time' not in patient:
       patient['arrival_time'] = time
 
     if 'ailment_deadline' in patient and patient['ailment_deadline'] > -1:
       if time > (patient['arrival_time'] + patient['ailment_deadline']):
-        dead.append(patient)
+        dead.append(patient['id'])
         return get_next_patient()
 
     return patient
@@ -42,7 +43,7 @@ def get_next_patient():
     
 
 def defer_patient(id):
-  queue.insert(patients_per_hour*2, all_patients[id])
+  queue.insert(patients_per_hour*2, all_patients[id]) # defer 2 hours
 
 def admit_patient(id):
   admitted.append(all_patients[id])
@@ -52,13 +53,13 @@ def dismiss_patient(id):
 
 def game_state():
   state = {}
-  state['state'] = 'in play' if time < end_game else 'ended'
+  state['state'] = 'in play' if (time < end_game or len(queue) == 0) else 'ended'
   state['time'] = time
   state['total_time'] = end_game
   state['admitted'] = len(admitted)
   state['dismissed'] = len(dismissed)
   
-  if time >= end_game:
+  if time >= end_game or len(queue) == 0:
     state['dead'] = len(dead)   
     state['score'] = patients_to_generate - len(data)
    
