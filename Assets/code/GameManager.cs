@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
 		string aspect = "game";
 		string method = "start";
 		string url = DEBUG_HOST + "/" + aspect + "/" + method;
-		CallEndpoint (url);
+		new WWW(url);
 		GetNewPatient();
 	}
 
@@ -25,12 +25,8 @@ public class GameManager : MonoBehaviour {
 		string aspect = "patients";
 		string method = "next";
 		string url = DEBUG_HOST + "/" + aspect + "/" + method;
-		//MARTIN: string jsonString = CallEndpoint (url);
 
-		//currentPatient = JsonUtility.FromJson<Patient> (jsonString);
-		currentPatient = DebugGenerateTestPatient ();
-
-		panelPatient.Populate (currentPatient);
+		StartCoroutine(CallPatientCreationEndpoint (url));
 	}
 
 	public void DeferPatient(){
@@ -54,14 +50,25 @@ public class GameManager : MonoBehaviour {
 	private void ProcessPatient(string action) {
 		string aspect = "patients";
 		string url = DEBUG_HOST + "/" + aspect + "/" + currentPatient.ID + "/" + action;
-		StartCoroutine(CallEndpoint (url));
+		new WWW(url);
 	}
 
-	IEnumerator CallEndpoint(string url) {
+	IEnumerator CallPatientCreationEndpoint(string url) {
+		currentPatient = DebugGenerateTestPatient ();
+		panelPatient.Populate (currentPatient);
+
 		WWW www = new WWW(url);
 		yield return www;
-		string jsonString = www.text;
-		//MARTIN: return jsonString;
+		/*
+		if (!string.IsNullOrEmpty (www.error)) {
+			Debug.Log (www.error);
+		} else {
+			
+		
+			string jsonString = www.text;
+			currentPatient = JsonUtility.FromJson<Patient> (jsonString);
+			panelPatient.Populate (currentPatient);
+		}*/
 	}
 
 	void Reset(){
