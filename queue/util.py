@@ -45,23 +45,25 @@ def get_next_patient():
   global admitted
   global dismissed
   global all_patients
-  
-  if time < end_game and len(queue) > 0:
-    time += 12
-    patient_id = queue.pop()
-    patient = all_patients[patient_id]
-  
-    if time % bed_decay == 0 and len(beds) > 0:
-      beds.pop()
 
-    if 'arrival_time' not in patient:
-      patient['arrival_time'] = time
-
+  # check for dead patients
+  for patient in all_patients:
     if 'ailment_deadline' in patient and patient['ailment_deadline'] > -1:
       if time > (patient['arrival_time'] + patient['ailment_deadline']):
         dead.append(patient['id'])
-        return get_next_patient()
+        queue.remove(patient['id'])
+  
+  if time < end_game and len(queue) > 0:
+    time += 12
 
+    # empty any beds
+    if time % bed_decay == 0 and len(beds) > 0:
+      beds.pop()
+
+    patient_id = queue.pop()
+    patient = all_patients[patient_id]
+    if 'arrival_time' not in patient:
+      patient['arrival_time'] = time
     return patient
   else:
     return {'end_game': True}
