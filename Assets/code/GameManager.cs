@@ -9,14 +9,25 @@ public class GameManager : MonoBehaviour {
 
 	private Patient currentPatient;
 
+	private string DEBUG_HOST = 10.184.5.117:5000;
+
 	public void StartGame(){
 		//Run any timer logic or shiiiit here
+		string aspect = "game";
+		string method = "start";
+		string url = DEBUG_HOST + "/" + aspect + "/" + method;
+		CallEndpoint (url);
 		GetNewPatient();
 	}
 
 	public void GetNewPatient(){
 		//Call web service ID
+		string aspect = "patients";
+		string method = "next";
+		string url = DEBUG_HOST + "/" + aspect + "/" + method;
+		string jsonString = CallEndpoint (url);
 
+		//currentPatient = JsonUtility.FromJson<Patient> (jsonString);
 		currentPatient = DebugGenerateTestPatient ();
 
 		panelPatient.Populate (currentPatient);
@@ -24,24 +35,34 @@ public class GameManager : MonoBehaviour {
 
 	public void DeferPatient(){
 		//Tell webservice to defer
-
+		ProcessPatient("defer");
 		GetNewPatient ();
 	}
 
 	public void AcceptPatient(){
 		//Tell web service to accept the patient
-
+		ProcessPatient("admit");
 		GetNewPatient ();
 	}
 
 	public void DismissPatient(){
 		//Tell web service to dismiss the patient
-
+		ProcessPatient("dismiss");
 		GetNewPatient ();
 	}
 
-	private void CallEndpoint(string methodName, string patientID){
+	private void ProcessPatient(string action) {
+		string aspect = "patients";
+		string url = DEBUG_HOST + "/" + aspect + "/" + currentPatient.ID + "/" + action;
+		CallEndpoint (url);
+	}
 
+	private void CallEndpoint(string url) {
+		IEnumerator Start() {
+			WWW www = new WWW(url);
+			yield return www;
+			string jsonString = www.text;
+			return jsonString;
 	}
 
 	void Reset(){

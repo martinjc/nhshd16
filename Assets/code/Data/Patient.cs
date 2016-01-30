@@ -11,6 +11,7 @@ public class Patient{
 	public int Age;
 	public string Gender;
 	public string PhotoFilename;
+	public string AilmentName;
 	public List<string> Symptoms;
 
 }
