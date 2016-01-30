@@ -20,6 +20,8 @@ public class HandbookSymptomListItem : MonoBehaviour {
 
 	private LayoutElement layoutElement;
 
+	private bool isExpanded;
+
 	void Start(){
 		layoutElement = GetComponent<LayoutElement> ();
 	}
@@ -35,18 +37,25 @@ public class HandbookSymptomListItem : MonoBehaviour {
 	}
 
 	public void Expand(){
-		HandbookManager.ContractAll ();
+		
+		if (isExpanded) {
+			HandbookManager.ContractAll ();
+		} else {
+			HandbookManager.ContractAll ();
 
-		if (causes == null) {
-			causes = new List<GameObject> ();
-		}
-		int scaleCounter = EXPANDED_VERTICAL_BASE_SCALE;
-		foreach (string cause in symptom.causes) {
-			causes.Add (GenerateCauseItem (cause));
-			scaleCounter += EXPANDED_VERTICAL_ITEM_SCALE;
-		}
+			if (causes == null) {
+				causes = new List<GameObject> ();
+			}
+			int scaleCounter = EXPANDED_VERTICAL_BASE_SCALE;
+			foreach (string cause in symptom.causes) {
+				causes.Add (GenerateCauseItem (cause));
+				scaleCounter += EXPANDED_VERTICAL_ITEM_SCALE;
+			}
 
-		layoutElement.minHeight = scaleCounter;
+			layoutElement.minHeight = scaleCounter;
+
+			isExpanded = true;
+		}
 	}
 
 	public void Contract(){
@@ -59,7 +68,8 @@ public class HandbookSymptomListItem : MonoBehaviour {
 		}
 
 		layoutElement.minHeight = DEFAULT_VERTICAL_BASE_SCALE;
-		//Then do resizing
+
+		isExpanded = false;
 	}
 
 	private GameObject GenerateCauseItem(string name){
