@@ -6,11 +6,16 @@ app = Flask(__name__)
 
 @app.route('/game/start')
 def start_game():
-  reset_time()   
+  reset_time()
+  return 'OK'
+
+@app.route('/game/state')
+def get_state():
+  return json.dumps(game_state())
 
 @app.route('/patient/next')
-def get_next_patient():
-  return json.dumps(generate_new_patient())
+def next_patient():
+  return json.dumps(get_next_patient())
 
 @app.route('/patient/<id>/<action>', methods=['POST'])
 def edit(id, action):
@@ -20,6 +25,7 @@ def edit(id, action):
     defer_patient(id)
   elif action == 'admin':
     accept_patient(id) 
+  return 'OK'
 
 if __name__ == '__main__':
     app.debug = True
