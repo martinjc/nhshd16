@@ -77,6 +77,7 @@ def game_state():
   state['total_time'] = end_game
   state['admitted'] = len(admitted)
   state['dismissed'] = len(dismissed)
+  state['in_queue'] = len(queue)
   state['total_beds'] = bed_limit
   state['used_beds'] = len(beds)
   
