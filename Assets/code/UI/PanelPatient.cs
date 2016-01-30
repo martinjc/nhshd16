@@ -8,6 +8,7 @@ public class PanelPatient : MonoBehaviour {
 	PatientPreview patientPreview;
 
 	public void Populate(Patient patient){
+		patientPreview.Photo = patient.Icon;
 		patientPreview.Name = patient.name;
 		patientPreview.Age = patient.age;
 		patientPreview.Gender = patient.sex;
