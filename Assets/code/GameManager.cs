@@ -60,9 +60,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	IEnumerator CallPatientCreationEndpoint(string url) {
-//		currentPatient = DebugGenerateTestPatient ();
-//		panelPatient.Populate (currentPatient);
-//		panelDiagnose.patient = currentPatient;
+		//		currentPatient = DebugGenerateTestPatient ();
+		//		panelPatient.Populate (currentPatient);
+		//		panelDiagnose.patient = currentPatient;
 
 		Debug.Log (url);
 
@@ -72,15 +72,15 @@ public class GameManager : MonoBehaviour {
 		//if (!string.IsNullOrEmpty (www.error)) {
 		//	Debug.Log (www.error);
 		//} else {
-			
-		
-			string jsonString = www.text;
+
+
+		string jsonString = www.text;
 
 		Debug.Log (jsonString);
 
-			currentPatient = JsonUtility.FromJson<Patient> (jsonString);
-			panelPatient.Populate (currentPatient);
-			panelDiagnose.patient = currentPatient;
+		currentPatient = JsonUtility.FromJson<Patient> (jsonString);
+		panelPatient.Populate (currentPatient);
+		panelDiagnose.patient = currentPatient;
 		//}
 	}
 
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour {
 		patient.age = Random.Range (0, 100);
 		patient.name = "Martin 'The cunt' Chorley";
 		patient.id = debugID.ToString ();
-		patient.gender = "Male";
+		patient.sex = "Male";
 		patient.photo_fpath = "debugPhoto.jpg";
 		patient.symptoms = new List<string> ();
 

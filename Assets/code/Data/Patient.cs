@@ -9,7 +9,7 @@ public class Patient{
 
 	public string name;
 	public int age;
-	public string gender;
+	public string sex;
 	public string photo_fpath;
 	public string ailment_name;
 	public List<string> symptoms;
