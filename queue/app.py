@@ -13,17 +13,17 @@ def start_game():
 def get_state():
   return json.dumps(game_state())
 
-@app.route('/patient/next')
+@app.route('/patients/next')
 def next_patient():
   return json.dumps(get_next_patient())
 
-@app.route('/patient/<id>/<action>', methods=['POST'])
+@app.route('/patients/<id>/<action>', methods=['POST'])
 def edit(id, action):
   if action == 'dismiss':
     dismiss_patient(id)
   elif action == 'defer':
     defer_patient(id)
-  elif action == 'admin':
+  elif action == 'admit':
     accept_patient(id) 
   return 'OK'
 
