@@ -24,7 +24,7 @@ def edit(id, action):
   elif action == 'defer':
     defer_patient(id)
   elif action == 'admit':
-    accept_patient(id) 
+    admit_patient(id) 
   return 'OK'
 
 if __name__ == '__main__':
