@@ -1,11 +1,16 @@
 from flask import Flask
 from util import *
+import json
 
 app = Flask(__name__)
 
+@app.route('/game/start')
+def start_game():
+  reset_time()   
+
 @app.route('/patient/next')
 def get_next_patient():
-  pass
+  return json.dumps(generate_new_patient())
 
 @app.route('/patient/<id>/<action>', methods=['POST'])
 def edit(id, action):
@@ -13,7 +18,7 @@ def edit(id, action):
     dismiss_patient(id)
   elif action == 'defer':
     defer_patient(id)
-  elif action == 'accept':
+  elif action == 'admin':
     accept_patient(id) 
 
 if __name__ == '__main__':
