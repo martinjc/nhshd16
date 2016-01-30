@@ -21,7 +21,9 @@ public class Patient{
 		get{
 			if(icon == null){
 				if(photo_fpath != null){
-					icon = Resources.Load("faces/" + photo_fpath, typeof(Sprite)) as Sprite;
+
+					string location = photo_fpath.Remove (photo_fpath.LastIndexOf ("."));
+					icon = Resources.Load("faces/" + location, typeof(Sprite)) as Sprite;
 				}
 			}
 			return icon;
