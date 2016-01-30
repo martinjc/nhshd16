@@ -8,9 +8,9 @@ public class PanelPatient : MonoBehaviour {
 	PatientPreview patientPreview;
 
 	public void Populate(Patient patient){
-		patientPreview.Name = patient.Name;
-		patientPreview.Age = patient.Age;
-		patientPreview.Gender = patient.Gender;
+		patientPreview.Name = patient.name;
+		patientPreview.Age = patient.age;
+		patientPreview.Gender = patient.sex;
 	}
 
 	//Have put this here so we can hook in any special UI stuff
