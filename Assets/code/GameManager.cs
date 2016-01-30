@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour {
 		string aspect = "game";
 		string method = "start";
 		string url = DEBUG_HOST + "/" + aspect + "/" + method;
+
+		Debug.Log (url);
+
 		new WWW(url);
 		GetNewPatient();
 	}
@@ -52,29 +55,33 @@ public class GameManager : MonoBehaviour {
 
 	private void ProcessPatient(string action) {
 		string aspect = "patients";
-		string url = DEBUG_HOST + "/" + aspect + "/" + currentPatient.ID + "/" + action;
+		string url = DEBUG_HOST + "/" + aspect + "/" + currentPatient.id + "/" + action;
 		new WWW(url);
 	}
 
 	IEnumerator CallPatientCreationEndpoint(string url) {
-		currentPatient = DebugGenerateTestPatient ();
+//		currentPatient = DebugGenerateTestPatient ();
+//		panelPatient.Populate (currentPatient);
+//		panelDiagnose.patient = currentPatient;
 
-		panelPatient.Populate (currentPatient);
-		panelDiagnose.patient = currentPatient;
-
+		Debug.Log (url);
 
 		WWW www = new WWW(url);
 		yield return www;
-		/*
-		if (!string.IsNullOrEmpty (www.error)) {
-			Debug.Log (www.error);
-		} else {
+
+		//if (!string.IsNullOrEmpty (www.error)) {
+		//	Debug.Log (www.error);
+		//} else {
 			
 		
 			string jsonString = www.text;
+
+		Debug.Log (jsonString);
+
 			currentPatient = JsonUtility.FromJson<Patient> (jsonString);
 			panelPatient.Populate (currentPatient);
-		}*/
+			panelDiagnose.patient = currentPatient;
+		//}
 	}
 
 	void Reset(){
@@ -85,15 +92,15 @@ public class GameManager : MonoBehaviour {
 	private Patient DebugGenerateTestPatient(){
 		Patient patient = new Patient ();
 
-		patient.Age = Random.Range (0, 100);
-		patient.Name = "Martin 'The cunt' Chorley";
-		patient.ID = debugID.ToString ();
-		patient.Gender = "Male";
-		patient.PhotoFilename = "debugPhoto.jpg";
-		patient.Symptoms = new List<string> ();
+		patient.age = Random.Range (0, 100);
+		patient.name = "Martin 'The cunt' Chorley";
+		patient.id = debugID.ToString ();
+		patient.gender = "Male";
+		patient.photo_fpath = "debugPhoto.jpg";
+		patient.symptoms = new List<string> ();
 
 		for (int i = 0; i < 10; ++i) {
-			patient.Symptoms.Add (i.ToString ());
+			patient.symptoms.Add (i.ToString ());
 		}
 
 		debugID++;

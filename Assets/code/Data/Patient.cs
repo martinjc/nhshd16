@@ -5,21 +5,23 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Patient{
 
-	public string ID;
+	public string id;
 
-	public string Name;
-	public int Age;
-	public string Gender;
-	public string PhotoFilename;
-	public string AilmentName;
-	public List<string> Symptoms;
+	public string name;
+	public int age;
+	public string gender;
+	public string photo_fpath;
+	public string ailment_name;
+	public List<string> symptoms;
+	public int arrival_time;
+	public int ailment_deadline;
 
 	private Sprite icon;
 	public Sprite Icon{
 		get{
 			if(icon == null){
-				if(PhotoFilename != null){
-					icon = Resources.Load("faces/" + PhotoFilename, typeof(Sprite)) as Sprite;
+				if(photo_fpath != null){
+					icon = Resources.Load("faces/" + photo_fpath, typeof(Sprite)) as Sprite;
 				}
 			}
 			return icon;
