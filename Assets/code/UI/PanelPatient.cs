@@ -13,6 +13,11 @@ public class PanelPatient : MonoBehaviour {
 		patientPreview.Gender = patient.Gender;
 	}
 
+	//Have put this here so we can hook in any special UI stuff
+	public void Diagnose(){
+		PanelManager.instance.ShowPanelDiagnose ();
+	}
+
 	void Reset(){
 		patientPreview = GetComponentInChildren<PatientPreview> ();
 	}
