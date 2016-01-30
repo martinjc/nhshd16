@@ -9,7 +9,7 @@ admitted = []
 dead = []
 time = 0
 
-patients_to_generate = 60
+patients_to_generate = 70
 end_game = 60*12
 patients_per_hour = 5
 bed_limit = 10
@@ -50,9 +50,10 @@ def get_next_patient():
     time += 12
     patient_id = queue.pop()
     patient = all_patients[patient_id]
-  
-    if time % bed_decay == 0 and len(beds) > 0:
-      beds.pop()
+
+    for id in beds :
+      if time >= all_patients[id]['arrival_time'] + bed_decay :
+        beds.remove(id)
 
     if 'arrival_time' not in patient:
       patient['arrival_time'] = time
@@ -97,7 +98,6 @@ def dismiss_patient(id):
 
 def game_state():
   state = {}
-  state['state'] = 'in play' if (time < end_game and len(queue) > 0) else 'ended'
   state['time'] = time
   state['total_time'] = end_game
   state['admitted'] = len(admitted)
@@ -107,7 +107,10 @@ def game_state():
   state['used_beds'] = len(beds)
   
   if time >= end_game or len(queue) == 0:
+    state['state'] = 'ended'
     state['dead'] = len(dead)   
     state['score'] = patients_to_generate - len(dead)
+  else:
+    state['state'] = 'in play'
    
   return state
