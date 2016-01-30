@@ -88,9 +88,3 @@ def generate_patient():
     dat['ailment_deadline'] = ail['ailment_deadline']
     dat['symptoms'] = select_symptoms(ail['symptoms'])
     return dat
-
-
-
-for _ in xrange(10):
-    dat = generate_patient()
-    pprint(dict(dat))
