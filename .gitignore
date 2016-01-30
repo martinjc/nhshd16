@@ -1,5 +1,8 @@
 #### joe made this: http://goel.io/joe
 
+##### Op. Sys #####
+.DS_Store
+
 #####=== Unity ===#####
 
 [Ll]ibrary/
@@ -19,4 +22,3 @@
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
-

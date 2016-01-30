@@ -1,0 +1,72 @@
+[
+  {
+    "ailment_prob": null,
+    "ailment_name":  "Heart Attack",
+    "ailment_deadline": 180,
+    "symptoms": [
+       {"name": "Central Chest Pain", "prob": 1.0},
+       {"name": "Clamminess", "prob": 0.6},
+       {"name": "Left Arm Pain", "prob": 0.3}
+    ]
+  },
+  {
+    "ailment_prob": null,
+    "ailment_name":  "Flu",
+    "ailment_deadline": -1,
+    "symptoms": [
+       {"name": "Runny Nose", "prob": 0.8},
+       {"name": "Aches", "prob": 0.7},
+       {"name": "High Temperature", "prob": 0.4}
+    ]
+  },
+  {
+    "ailment_prob": null,
+    "ailment_name":  "Hayfever",
+    "ailment_deadline": -1,
+    "symptoms": [
+       {"name": "Runny Nose", "prob": 0.8},
+       {"name": "Red Eyes", "prob": 0.6},
+       {"name": "Headache", "prob": 0.3}
+    ]
+  },
+  {
+    "ailment_prob": null,
+    "ailment_name":  "Drunk",
+    "ailment_deadline": -1,
+    "symptoms": [
+       {"name": "Slurred Speech", "prob": 0.7},
+       {"name": "Poor Coordination", "prob": 0.8},
+       {"name": "Vomiting", "prob": 0.5}
+    ]
+  },
+  {
+    "ailment_prob": null,
+    "ailment_name":  "Meningitis",
+    "ailment_deadline": 360,
+    "symptoms": [
+       {"name": "Headache", "prob": 0.8},
+       {"name": "Photophobia", "prob": 0.95},
+       {"name": "High Temperature", "prob": 1.0}
+    ]
+  },
+  {
+    "ailment_prob": null,
+    "ailment_name":  "Migraine",
+    "ailment_deadline": -1,
+    "symptoms": [
+       {"name": "Headache", "prob": 1.0},
+       {"name": "Photophobia", "prob": 0.6},
+       {"name": "High Temperature", "prob": 0.1}
+    ]
+  },
+  {
+    "ailment_prob": null,
+    "ailment_name":  "Stroke",
+    "ailment_deadline": 180,
+    "symptoms": [
+       {"name": "Slurred Speech", "prob": 0.8},
+       {"name": "Facial Droop", "prob": 0.95},
+       {"name": "Poor Coordination", "prob": 0.6}
+    ]
+  }
+]
