@@ -50,9 +50,10 @@ def get_next_patient():
     time += 12
     patient_id = queue.pop()
     patient = all_patients[patient_id]
-  
-    if time % bed_decay == 0 and len(beds) > 0:
-      beds.pop()
+
+    for id in beds :
+      if time >= all_patients[id]['arrival_time'] + bed_decay :
+        beds.remove(id)
 
     if 'arrival_time' not in patient:
       patient['arrival_time'] = time
