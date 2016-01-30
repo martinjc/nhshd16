@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route('/game/start')
 def start_game():
   reset_time()
-  return 'OK'
+  return json.dumps({'success': True})
 
 @app.route('/game/state')
 def get_state():

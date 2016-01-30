@@ -7,8 +7,8 @@ queue = []
 dismissed = []
 admitted = []
 dead = []
-
 time = 0
+
 patients_to_generate = 60
 end_game = 60*12
 patients_per_hour = 5
@@ -17,8 +17,21 @@ bed_decay = 36
 
 
 def reset_time():
+  global time
+  global queue
+  global beds
+  global admitted
+  global dismissed
+  global all_patients
+
   time = 0
-  patients = [{'name':'fred'}, {'name':'ben'}, {'name': 'lisa'}]
+
+  all_patients = {}
+  beds = []
+  queue = []
+  admitted = []
+  dismissed = []
+  dead = []
   for i in range(patients_to_generate): 
     patient = dict(generate_patient())
     patient['id'] = str(i)
@@ -27,6 +40,11 @@ def reset_time():
 
 def get_next_patient():  
   global time
+  global queue
+  global beds
+  global admitted
+  global dismissed
+  global all_patients
   
   if time < end_game and len(queue) > 0:
     time += 12
@@ -50,6 +68,8 @@ def get_next_patient():
     
 
 def defer_patient(id):
+  global queue
+
   try:
     queue.insert(patients_per_hour*2, id) # defer 2 hours
   except:
@@ -57,6 +77,9 @@ def defer_patient(id):
   return {'OK': True}
 
 def admit_patient(id):
+  global beds
+  global admitted
+
   if len(beds) < bed_limit:
     beds.append(id)
     admitted.append(id)
@@ -67,6 +90,8 @@ def admit_patient(id):
     return {'beds_full': False}
 
 def dismiss_patient(id):
+  global dismissed
+
   dismissed.append(id)
   return {'OK': True}
 
