@@ -125,7 +125,7 @@ def get_handbook(patient_id=None):
   if patient_id :
     patient = all_patients[patient_id]
     return filter(lambda el: el['symptom'] in patient['symptoms'], handbook)
-  return handbook
+  return { 'handbook' : { 'symptoms' : handbook } }
 
 def get_time_display(time_to_show):
   hour = time_to_show.hour

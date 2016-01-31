@@ -6,6 +6,7 @@ from pprint import pprint
 from functools32 import lru_cache
 import random
 import collections
+import numpy as np
 
 
 @lru_cache(None)
@@ -67,9 +68,13 @@ def generate_skeleton():
         ('photo_fpath', photo_fp), ('photo_fname', photo_fname)])
     return dat
 
+
 def generate_ailment():
     ails = load_ailments()
-    ail = random.choice(ails)
+    weights = np.array([ail['ailment_prob'] for ail in ails], np.float64)
+    weights = weights / weights.sum()
+        # dumb! not satistical! wheeeeee
+    ail = np.random.choice(ails, p=weights)
     return ail
 
 
@@ -94,8 +99,8 @@ def generate_patient():
     dat['symptoms'] = select_symptoms(ail['symptoms'])
     return dat
 
-def generate_handbook():
 
+def generate_handbook():
   handbook = []
   symptoms = load_symptoms()
   ailments = load_ailments()
@@ -108,4 +113,12 @@ def generate_handbook():
         causes.append(ailment['ailment_name'])
 
     handbook.append({'name' : symptom_name, 'causes' : causes})
+    print handbook
   return handbook
+
+
+if __name__ == "__main__":
+    for _ in xrange(10):
+        pat = generate_patient()
+        pprint(dict(pat))
+
