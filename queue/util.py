@@ -7,7 +7,7 @@ end_game = 60 * 12
 bed_limit = 10
 bed_decay = 30
 
-patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 tick_time = 5
 tick_rate = 5
 
@@ -22,6 +22,8 @@ class Game:
     self.dead = []
     self.time = 0
     self.real_time = datetime.datetime.now().replace(hour = 8, minute = 0, second = 0)
+  def is_ended(self):
+    return self.time >= end_game
 
 game = Game()
 
@@ -43,7 +45,7 @@ def reset_time():
   create_patients(2)
     
   def timer():
-    while not is_game_ended():
+    while not game.is_ended():
       increment_time()
       sleep(tick_time)
   thr = threading.Thread(target=timer)
@@ -76,7 +78,7 @@ def increment_time():
 def get_next_patient():  
   global game
  
-  if is_game_ended():
+  if game.is_ended():
     return {'game_ended': True}
 
   for patient_id in game.deferred:
@@ -148,15 +150,20 @@ def game_state():
   state['total_beds'] = bed_limit
   state['used_beds'] = len(game.beds)
   
-  if is_game_ended():
+  if game.is_ended():
     state['state'] = 'ended'
-    state['dead'] = len(game.dead)   
+    state['dead'] = []
+    score = 0
+    score -= 2 * len(game.dead)
+    for patient_id in game.admitted:
+      if game.all_patients[patient_id]['ailment_deadline'] > -1:
+        score -= 1
+    for patient_id in game.dead:
+      state['dead'].append(game.all_patients[patient_id])
+    state['score'] = score
+    
+    
   else:
     state['state'] = 'in play'
    
   return state
-
-def is_game_ended():
-  global game
-
-  return game.time >= end_game
