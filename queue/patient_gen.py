@@ -102,10 +102,10 @@ def generate_handbook():
 
   for symptom in symptoms :
     symptom_name = symptom['name']
-    possibilities = []
+    causes = []
     for ailment in ailments :
       if symptom['name'] in map(lambda obj: obj['name'], ailment['symptoms']) :
-        possibilities.append(ailment['ailment_name'])
+        causes.append(ailment['ailment_name'])
 
-    handbook.append({'symptom' : symptom_name, 'possibilities' : possibilities})
+    handbook.append({'name' : symptom_name, 'causes' : causes})
   return handbook
