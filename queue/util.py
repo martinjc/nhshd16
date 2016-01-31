@@ -30,7 +30,7 @@ game = Game()
 def create_patients(n):
   global game
 
-  for i in range(n): 
+  for i in range(n):
     patient = dict(generate_patient())
     patient['id'] = str(uuid.uuid4())
     game.all_patients[patient['id']] = patient
@@ -39,11 +39,11 @@ def create_patients(n):
     patient['status'] = 'alive'
 
 def reset_time():
-  global game 
+  global game
 
   game = Game()
   create_patients(2)
-    
+
   def timer():
     while not game.is_ended():
       increment_time()
@@ -53,7 +53,7 @@ def reset_time():
 
 def increment_time():
   global game
- 
+
   game.time += tick_rate
   game.real_time += datetime.timedelta(minutes = tick_rate)
   create_patients(random.choice(patient_generation))
@@ -75,10 +75,10 @@ def increment_time():
       game.beds.remove(id)
 
 
-def get_next_patient():  
+def get_next_patient():
   global game
- 
-  if game.is_ended():
+
+  if is_game_ended():
     return {'game_ended': True}
 
   for patient_id in game.deferred:
@@ -86,7 +86,7 @@ def get_next_patient():
     if game.all_patients[patient_id]['deferred_until'] <= game.time:
       patient_id = game.deferred.pop()
       return game.all_patients[patient_id]
- 
+
   if len(game.queue) > 0:
     patient_id = game.queue.pop()
     patient = game.all_patients[patient_id]
@@ -97,14 +97,14 @@ def get_next_patient():
 
 def defer_patient(id):
   global game
- 
+
   game.all_patients[id]['deferred_until'] = game.time + defer_time
   game.all_patients[id]['deferred'] = True
   game.deferred.append(id)
   return {'OK': True}
 
 def admit_patient(id):
-  global game 
+  global game
 
   if len(game.beds) < bed_limit:
     game.beds.append(id)
@@ -117,7 +117,7 @@ def admit_patient(id):
     return {'beds_full': False}
 
 def dismiss_patient(id):
-  global game 
+  global game
 
   game.dismissed.append(id)
   return {'OK': True}
@@ -127,7 +127,7 @@ def get_handbook(patient_id=None):
   if patient_id :
     patient = all_patients[patient_id]
     return filter(lambda el: el['symptom'] in patient['symptoms'], handbook)
-  return { 'handbook' : { 'symptoms' : handbook } }
+  return { 'symptoms' : handbook }
 
 def get_time_display(time_to_show):
   hour = time_to_show.hour
@@ -149,7 +149,8 @@ def game_state():
   state['in_queue'] = len(game.queue)
   state['total_beds'] = bed_limit
   state['used_beds'] = len(game.beds)
-  
+
+
   if game.is_ended():
     state['state'] = 'ended'
     state['dead'] = []
@@ -162,9 +163,8 @@ def game_state():
     for patient_id in game.dead:
       state['dead'].append(game.all_patients[patient_id])
     state['score'] = score
-    
-    
+
   else:
     state['state'] = 'in play'
-   
+
   return state
