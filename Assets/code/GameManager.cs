@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	HandbookManager handbookManager;
 
+	[SerializeField]
+	private PanelEndGame panelEndGame;
+
 	private Patient currentPatient;
 
 	[SerializeField]
@@ -68,6 +71,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void EndGame() {
+		panelEndGame.deathNum.text = currentGameState.dead.ToString();
+		panelEndGame.score.text = currentGameState.score.ToString();
+		PanelManager.instance.ShowEndgame ();
 		Debug.Log ("We're Done. Fuck Martin.");
 	}
 
