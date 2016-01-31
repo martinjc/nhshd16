@@ -93,7 +93,6 @@ public class GameManager : MonoBehaviour {
 	private void ProcessPatient(string action) {
 		string aspect = "patients";
 		string url = DEBUG_HOST + "/" + aspect + "/" + currentPatient.id + "/" + action;
-		new WWW(url);
 		WWWForm wwwForm = new WWWForm ();
 		wwwForm.AddField ("test", "true");
 		new WWW(url, wwwForm);
