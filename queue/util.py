@@ -1,5 +1,6 @@
-import json, random
+import json, random, threading, uuid
 from patient_gen import generate_patient
+from time import sleep
 
 all_patients = {}
 beds = []
@@ -14,6 +15,7 @@ end_game = 60*12
 patients_per_hour = 5
 bed_limit = 10
 bed_decay = 36
+tick_time = 3
 
 
 def reset_time():
@@ -32,11 +34,41 @@ def reset_time():
   admitted = []
   dismissed = []
   dead = []
-  for i in range(patients_to_generate): 
+  for i in range(2): 
     patient = dict(generate_patient())
-    patient['id'] = str(i)
-    all_patients[str(i)] = patient
+    patient['id'] = str(uuid.uuid4())
+    all_patients[patient['id']] = patient
     queue.append(patient['id'])
+  
+  def timer():
+    while not is_game_ended():
+      increment_time()
+      sleep(tick_time)
+  thr = threading.Thread(target=timer)
+  thr.start()
+
+def increment_time():
+  global time
+  global queue
+  global beds
+  global admitted
+  global dismissed
+  global all_patients
+  
+  time += 5
+
+  # check for dead patients
+  for patient in all_patients:
+    if 'ailment_deadline' in patient and patient['ailment_deadline'] > -1 and 'arrival_time' in patient:
+      if time > (patient['arrival_time'] + patient['ailment_deadline']) and patient['id'] not in admitted:
+        dead.append(patient['id'])
+        queue.remove(patient['id'])
+
+  # check patients leaving beds
+  for id in beds :
+    if time >= all_patients[id]['arrival_time'] + bed_decay:
+      beds.remove(id)
+
 
 def get_next_patient():  
   global time
@@ -45,21 +77,8 @@ def get_next_patient():
   global admitted
   global dismissed
   global all_patients
-
-  # check for dead patients
-  for patient in all_patients:
-    if 'ailment_deadline' in patient and patient['ailment_deadline'] > -1:
-      if time > (patient['arrival_time'] + patient['ailment_deadline']):
-        dead.append(patient['id'])
-        queue.remove(patient['id'])
   
   if time < end_game and len(queue) > 0:
-    time += 12
-
-    for id in beds :
-      if time >= all_patients[id]['arrival_time'] + bed_decay :
-        beds.remove(id)
-
     patient_id = queue.pop()
     patient = all_patients[patient_id]
     if 'arrival_time' not in patient:
@@ -67,7 +86,6 @@ def get_next_patient():
     return patient
   else:
     return {'end_game': True}
-    
 
 def defer_patient(id):
   global queue
@@ -107,7 +125,7 @@ def game_state():
   state['total_beds'] = bed_limit
   state['used_beds'] = len(beds)
   
-  if time >= end_game or len(queue) == 0:
+  if is_game_end():
     state['state'] = 'ended'
     state['dead'] = len(dead)   
     state['score'] = patients_to_generate - len(dead)
@@ -115,3 +133,10 @@ def game_state():
     state['state'] = 'in play'
    
   return state
+
+def is_game_ended():
+  global time
+  global end_game
+
+  return time >= end_game
+  
