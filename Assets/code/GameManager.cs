@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
 
 		//DEBUG
 		Handbook handbook = new Handbook();
-		handbook.symptoms = new List<Symptom> ();
+//		handbook.symptoms = new List<Symptom> ();
 //		for (int i = 0; i < Random.Range(3, 9); ++i) {
 //			Symptom symptom = new Symptom ();
 //			symptom.name = "Symptom " + i.ToString();
@@ -51,9 +51,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void PopulateHandbook(Handbook handbook){
-		handbookManager.Populate (handbook);
 		string url = DEBUG_HOST + "/handbook/complete";
-		StartCoroutine (CallHandbookCreationEndpoint (url));
+		StartCoroutine (CallHandbookCreationEndpoint (url, handbook));
+//		handbookManager.Populate (handbook);
 	}
 		
 
@@ -112,14 +112,14 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	IEnumerator CallHandbookCreationEndpoint(string url) {
-		WWW www = new WWW(url);
+	IEnumerator CallHandbookCreationEndpoint(string url, Handbook hb) {
+		WWW www = new WWW(DEBUG_HOST + "/handbook/complete");
 		yield return www;
 		string responseJson = www.text;
 		Debug.Log (responseJson);
-//		Debug.Log (JsonUtility.ToJson(responseJson,true));
-		//issues with JsonUtility prevents deserializing into an array
-//		Handbook hb = JsonUtility.FromJson<Handbook>(responseJson);
+		//issues with JsonUtility prevents deserializing top level arrays
+		hb = JsonUtility.FromJson<Handbook>(responseJson);
+		Debug.Log (hb.symptoms.Count);
 
 	}
 
