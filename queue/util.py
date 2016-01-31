@@ -4,11 +4,11 @@ from time import sleep
 import numpy as np
 
 defer_time = 120
-end_game = 45 * 1
+end_game = 45 # number of simulated mins to run for (default: 1 simulated min = 1 real sec)
 bed_limit = 10
 bed_decay = 60
 
-average_new_patients = 0.5  # e.g., 0.3 means 1/3 patient every `tick_time`
+average_new_patients = 0.7  # e.g., 0.3 means 1/3 patient every `tick_time`
 tick_time = 5
 tick_rate = 5
 
