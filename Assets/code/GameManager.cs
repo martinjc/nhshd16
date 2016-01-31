@@ -18,9 +18,19 @@ public class GameManager : MonoBehaviour {
 
 	private Patient currentPatient;
 
+	[SerializeField]
+	private Chart patientChart;
+
+	[SerializeField]
+	private Chart bedChart;
+
+	public bool isUpdating;
+
 	private const string DEBUG_HOST = "127.0.0.1:5000";
 
 	public void StartGame(){
+		isUpdating = false;
+
 		//Run any timer logic or shiiiit here
 		string aspect = "game";
 		string method = "start";
@@ -29,21 +39,32 @@ public class GameManager : MonoBehaviour {
 		GetNewPatient();
 
 		//DEBUG
+		//		Handbook handbook = new Handbook();
+		//		handbook.symptoms = new List<Symptom> ();
+		//		for (int i = 0; i < Random.Range(3, 9); ++i) {
+		//			Symptom symptom = new Symptom ();
+		//			symptom.name = "Symptom " + i.ToString();
+		//
+		//			symptom.causes = new List<string> ();
+		//			for (int j = 0; j < Random.Range(2, 7); ++j) {
+		//				symptom.causes.Add ("Cause " + j.ToString ());
+		//			}
+		//
+		//			handbook.symptoms.Add (symptom);
+		//		}
+
 		Handbook handbook = new Handbook();
-//		handbook.symptoms = new List<Symptom> ();
-//		for (int i = 0; i < Random.Range(3, 9); ++i) {
-//			Symptom symptom = new Symptom ();
-//			symptom.name = "Symptom " + i.ToString();
-//
-//			symptom.causes = new List<string> ();
-//			for (int j = 0; j < Random.Range(2, 7); ++j) {
-//				symptom.causes.Add ("Cause " + j.ToString ());
-//			}
-//
-//			handbook.symptoms.Add (symptom);
-//		}
 
 		PopulateHandbook (handbook);
+
+		//Start update cycle
+		InvokeRepeating ("UpdateStateCycle", 0f, 1f);
+	}
+
+	public void UpdateStateCycle(){
+		if (!isUpdating) {
+			stillPlaying ();
+		}
 	}
 
 	public void EndGame() {
@@ -53,9 +74,9 @@ public class GameManager : MonoBehaviour {
 	public void PopulateHandbook(Handbook handbook){
 		string url = DEBUG_HOST + "/handbook/complete";
 		StartCoroutine (CallHandbookCreationEndpoint (url, handbook));
-//		handbookManager.Populate (handbook);
+		//		handbookManager.Populate (handbook);
 	}
-		
+
 
 	public void GetNewPatient(){
 		if (stillPlaying ()) {
@@ -102,6 +123,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	IEnumerator CallStateEndpoint() {
+		isUpdating = true;
 		string url = DEBUG_HOST + "/game/state";
 		WWW www = new WWW (url);
 		yield return www;
@@ -110,6 +132,12 @@ public class GameManager : MonoBehaviour {
 		if(currentGameState.state == "ended"){
 			EndGame ();
 		}
+
+		//Update charts
+		patientChart.Set(currentGameState.in_queue, currentGameState.in_queue);
+		bedChart.Set(currentGameState.total_beds, currentGameState.used_beds);
+
+		isUpdating = false;
 	}
 
 	IEnumerator CallHandbookCreationEndpoint(string url, Handbook hb) {
@@ -120,8 +148,7 @@ public class GameManager : MonoBehaviour {
 		//issues with JsonUtility prevents deserializing top level arrays
 		hb = JsonUtility.FromJson<Handbook>(responseJson);
 		Debug.Log (hb.symptoms.Count);
-		handbookManager.Populate (hb); 
-
+		handbookManager.Populate(hb);
 	}
 
 	IEnumerator CallPatientCreationEndpoint(string url) {
