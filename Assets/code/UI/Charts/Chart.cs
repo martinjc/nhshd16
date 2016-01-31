@@ -7,10 +7,13 @@ public class Chart : MonoBehaviour {
 	private ChartItem chartItemPrefab;
 
 	public void Set(int totalItems, int filledItems){
+		Debug.Log ("Updating charts.");
 		int changeInTotal = -(transform.childCount - totalItems);
 
+		Debug.Log ("Change = " + changeInTotal);
+
 		if (changeInTotal < 0) {
-			for (int i = 0; i < changeInTotal; ++i) {
+			for (int i = 0; i < Mathf.Abs(changeInTotal); ++i) {
 				RemoveItem ();
 			}
 		} else {
@@ -21,7 +24,8 @@ public class Chart : MonoBehaviour {
 	}
 
 	private void RemoveItem(){
-		Destroy (transform.GetChild (transform.childCount - 1));
+		Debug.Log ("Trying to remove items.");
+		Destroy (transform.GetChild (transform.childCount - 1).gameObject);
 	}
 
 	private void AddItem(){
