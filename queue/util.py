@@ -7,7 +7,7 @@ end_game = 60 * 12
 bed_limit = 10
 bed_decay = 30
 
-patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1]
+patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 tick_time = 5
 tick_rate = 5
 
@@ -99,7 +99,7 @@ def admit_patient(id):
   global game 
 
   if len(game.beds) < bed_limit:
-    gaeme.beds.append(id)
+    game.beds.append(id)
     game.admitted.append(id)
 
   if len(game.beds) >= bed_limit:
