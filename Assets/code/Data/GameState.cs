@@ -14,4 +14,5 @@ public class GameState {
 	public int in_queue;
 	public int dead;
 	public int total_beds;
+	public string real_time;
 }
