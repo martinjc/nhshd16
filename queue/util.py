@@ -1,14 +1,15 @@
-import json, random, threading, uuid, datetime
+import json, random, threading, uuid, datetime, numpy
 from patient_gen import generate_patient, generate_handbook
 from time import sleep
+import numpy as np
 
 defer_time = 120
 end_game = 60 * 12
 bed_limit = 10
 bed_decay = 30
 
-patient_generation = [0, 0, 0, 0, 1]
-tick_time = 1
+average_new_patients = 0.5  # e.g., 0.3 means 1/3 patient every `tick_time`
+tick_time = 5
 tick_rate = 5
 
 class Game:
@@ -29,7 +30,7 @@ game = Game()
 
 def create_patients(n):
   global game
-  print 'creating',n,'patients'
+
   for i in range(n):
     patient = dict(generate_patient())
     patient['id'] = str(uuid.uuid4())
@@ -56,7 +57,9 @@ def increment_time():
 
   game.time += tick_rate
   game.real_time += datetime.timedelta(minutes = tick_rate)
-  create_patients(random.choice(patient_generation))
+
+  num_create = np.random.poisson(lam=average_new_patients)
+  create_patients(num_create)
 
   # check for dead patients
   for patient_id in game.all_patients:
