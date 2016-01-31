@@ -7,8 +7,8 @@ end_game = 60 * 12
 bed_limit = 10
 bed_decay = 30
 
-patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-tick_time = 5
+patient_generation = [0, 0, 0, 0, 1]
+tick_time = 1
 tick_rate = 5
 
 class Game:
@@ -29,7 +29,7 @@ game = Game()
 
 def create_patients(n):
   global game
-
+  print 'creating',n,'patients'
   for i in range(n):
     patient = dict(generate_patient())
     patient['id'] = str(uuid.uuid4())
