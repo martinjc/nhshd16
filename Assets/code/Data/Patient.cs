@@ -15,6 +15,8 @@ public class Patient{
 	public List<string> symptoms;
 	public int arrival_time;
 	public int ailment_deadline;
+	public int deferred_until;
+	public bool deferred;
 
 	private Sprite icon;
 	public Sprite Icon{
