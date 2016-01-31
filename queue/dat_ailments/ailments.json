@@ -1,6 +1,6 @@
 [
   {
-    "ailment_prob": null,
+    "ailment_prob": 0.1,
     "ailment_name":  "Heart Attack",
     "ailment_deadline": 180,
     "symptoms": [
@@ -10,7 +10,7 @@
     ]
   },
   {
-    "ailment_prob": null,
+    "ailment_prob": 0.5,
     "ailment_name":  "Flu",
     "ailment_deadline": -1,
     "symptoms": [
@@ -20,7 +20,7 @@
     ]
   },
   {
-    "ailment_prob": null,
+    "ailment_prob": 0.4,
     "ailment_name":  "Hayfever",
     "ailment_deadline": -1,
     "symptoms": [
@@ -30,7 +30,7 @@
     ]
   },
   {
-    "ailment_prob": null,
+    "ailment_prob": 0.3,
     "ailment_name":  "Drunk",
     "ailment_deadline": -1,
     "symptoms": [
@@ -40,7 +40,7 @@
     ]
   },
   {
-    "ailment_prob": null,
+    "ailment_prob": 0.3,
     "ailment_name":  "Meningitis",
     "ailment_deadline": 360,
     "symptoms": [
@@ -50,7 +50,7 @@
     ]
   },
   {
-    "ailment_prob": null,
+    "ailment_prob": 0.6,
     "ailment_name":  "Migraine",
     "ailment_deadline": -1,
     "symptoms": [
@@ -59,7 +59,7 @@
     ]
   },
   {
-    "ailment_prob": null,
+    "ailment_prob": 0.3,
     "ailment_name":  "Stroke",
     "ailment_deadline": 180,
     "symptoms": [
