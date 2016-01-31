@@ -8,7 +8,7 @@ bed_limit = 10
 bed_decay = 30
 
 patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-tick_time = 0.1
+tick_time = 5
 tick_rate = 5
 
 class Game:
@@ -78,11 +78,10 @@ def increment_time():
 def get_next_patient():
   global game
 
-  if is_game_ended():
+  if game.is_ended():
     return {'game_ended': True}
 
   for patient_id in game.deferred:
-    print patient_id
     if game.all_patients[patient_id]['deferred_until'] <= game.time:
       patient_id = game.deferred.pop()
       return game.all_patients[patient_id]
@@ -149,7 +148,6 @@ def game_state():
   state['in_queue'] = len(game.queue)
   state['total_beds'] = bed_limit
   state['used_beds'] = len(game.beds)
-
 
   if game.is_ended():
     state['state'] = 'ended'
