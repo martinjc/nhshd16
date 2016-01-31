@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
 
 	public bool isUpdating;
 
-	private const string DEBUG_HOST = "10.184.5.117:5000";
+	private const string DEBUG_HOST = "127.0.0.1:5000";//"10.184.5.117:5000";
 
 	public void StartGame(){
 		isUpdating = false;
