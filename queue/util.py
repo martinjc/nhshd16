@@ -118,7 +118,7 @@ def get_handbook(patient_id=None):
   if patient_id :
     patient = all_patients[patient_id]
     return filter(lambda el: el['symptom'] in patient['symptoms'], handbook)
-  return handbook
+  return { 'handbook' : { 'symptoms' : handbook } }
 
 def game_state():
   global game
