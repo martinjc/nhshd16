@@ -1,4 +1,4 @@
-import json, random, threading, uuid
+import json, random, threading, uuid, datetime
 from patient_gen import generate_patient, generate_handbook
 from time import sleep
 
@@ -21,17 +21,20 @@ class Game:
     self.admitted = []
     self.dead = []
     self.time = 0
+    self.real_time = datetime.datetime.now().replace(hour = 8, minute = 0, second = 0)
 
 game = Game()
 
 def create_patients(n):
   global game
 
-  for i in range(2): 
+  for i in range(n): 
     patient = dict(generate_patient())
     patient['id'] = str(uuid.uuid4())
     game.all_patients[patient['id']] = patient
     game.queue.append(patient['id'])
+    patient['arrival_time'] = game.time
+    patient['status'] = 'alive'
 
 def reset_time():
   global game 
@@ -48,20 +51,25 @@ def reset_time():
 
 def increment_time():
   global game
-  
+ 
   game.time += tick_rate
+  game.real_time += datetime.timedelta(minutes = tick_rate)
   create_patients(random.choice(patient_generation))
 
   # check for dead patients
-  for patient in game.all_patients:
-    if 'ailment_deadline' in patient and patient['ailment_deadline'] > -1 and 'arrival_time' in patient:
-      if game.time > (patient['arrival_time'] + patient['ailment_deadline']) and patient['id'] not in game.admitted:
+  for patient_id in game.all_patients:
+    patient = game.all_patients[patient_id]
+    if patient['ailment_deadline'] > -1 and game.time > (patient['arrival_time'] + patient['ailment_deadline']) and patient['id'] not in game.admitted:
         game.dead.append(patient['id'])
-        game.queue.remove(patient['id'])
+        if patient['id'] in game.deferred:
+          game.deferred.remove(patient['id'])
+        if patient['id'] in game.queue:
+          game.queue.remove(patient['id'])
+        game.all_patients[patient['id']]['status'] = 'dead'
 
   # check patients leaving beds
   for id in game.beds :
-    if game.time >= game.all_patients[id]['arrival_time'] + bed_decay:
+    if game.time >= game.all_patients[id]['admission_time'] + bed_decay:
       game.beds.remove(id)
 
 
@@ -80,9 +88,7 @@ def get_next_patient():
   if len(game.queue) > 0:
     patient_id = game.queue.pop()
     patient = game.all_patients[patient_id]
-    if 'arrival_time' not in patient:
-      patient['arrival_time'] = game.time
-      patient['deferred'] = False
+    patient['deferred'] = False
     return patient
   else:
     return {}
@@ -101,6 +107,7 @@ def admit_patient(id):
   if len(game.beds) < bed_limit:
     game.beds.append(id)
     game.admitted.append(id)
+    game.all_patients[id]['admission_time'] = game.time
 
   if len(game.beds) >= bed_limit:
     return {'beds_full': True}
@@ -120,11 +127,19 @@ def get_handbook(patient_id=None):
     return filter(lambda el: el['symptom'] in patient['symptoms'], handbook)
   return handbook
 
+def get_time_display(time_to_show):
+  hour = time_to_show.hour
+  minute = time_to_show.minute
+  hour = '0' + str(hour) if hour < 10 else str(hour)
+  minute = '0' + str(minute) if minute < 10 else str(minute)
+  return hour + ':' + minute
+
 def game_state():
   global game
 
   state = {}
   state['time'] = game.time
+  state['real_time'] = get_time_display(game.real_time)
   state['total_time'] = end_game
   state['admitted'] = len(game.admitted)
   state['deferred'] = len(game.deferred)
