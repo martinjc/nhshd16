@@ -6,7 +6,7 @@ import numpy as np
 defer_time = 120
 end_game = 60 * 12
 bed_limit = 10
-bed_decay = 30
+bed_decay = 60
 
 average_new_patients = 1  # e.g., 0.3 means 1/3 patient every `tick_time`
 tick_time = 5
