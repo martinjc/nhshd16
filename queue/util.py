@@ -8,7 +8,7 @@ end_game = 60 * 12
 bed_limit = 10
 bed_decay = 30
 
-average_new_patients = 0.5  # e.g., 0.3 means 1/3 patient every `tick_time`
+average_new_patients = 1  # e.g., 0.3 means 1/3 patient every `tick_time`
 tick_time = 5
 tick_rate = 5
 
