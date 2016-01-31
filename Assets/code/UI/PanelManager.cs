@@ -11,6 +11,7 @@ public class PanelManager : MonoBehaviour
 	public Transform PanelStart;
 	public Transform PanelDiagnose;
 	public Transform PanelHandbook;
+	public Transform PanelEndgame;
 
 	public static PanelManager _instance;
 
@@ -69,5 +70,9 @@ public class PanelManager : MonoBehaviour
 
 	public void ShowPanelHandbook(){
 		Show (PanelHandbook);
+	}
+
+	public void ShowEndgame(){
+		Show (PanelEndgame);
 	}
 }

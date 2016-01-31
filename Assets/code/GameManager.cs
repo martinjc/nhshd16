@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	HandbookManager handbookManager;
 
+	[SerializeField]
+	private PanelEndGame panelEndGame;
+
 	private Patient currentPatient;
 
 	[SerializeField]
@@ -26,7 +29,7 @@ public class GameManager : MonoBehaviour {
 
 	public bool isUpdating;
 
-	private const string DEBUG_HOST = "127.0.0.1:5000";
+	private const string DEBUG_HOST = "127.0.0.1:5000";//"10.184.5.117:5000";
 
 	public void StartGame(){
 		isUpdating = false;
@@ -68,6 +71,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void EndGame() {
+		panelEndGame.deathNum.text = currentGameState.dead.ToString();
+		panelEndGame.score.text = currentGameState.score.ToString();
+		PanelManager.instance.ShowEndgame ();
 		Debug.Log ("We're Done. Fuck Martin.");
 	}
 
@@ -104,8 +110,11 @@ public class GameManager : MonoBehaviour {
 
 	public void AcceptPatient(){
 		//Tell web service to accept the patient
-		ProcessPatient("admit");
-		GetNewPatient ();
+
+		if (currentGameState.total_beds - currentGameState.used_beds > 0) {
+			ProcessPatient ("admit");
+			GetNewPatient ();
+		}
 	}
 
 	public void DismissPatient(){
@@ -133,6 +142,8 @@ public class GameManager : MonoBehaviour {
 			EndGame ();
 		}
 
+
+
 		//Update charts
 		patientChart.Set(currentGameState.in_queue, currentGameState.in_queue);
 		bedChart.Set(currentGameState.total_beds, currentGameState.used_beds);
@@ -157,6 +168,7 @@ public class GameManager : MonoBehaviour {
 		string jsonString = www.text;
 		Debug.Log (jsonString);
 		currentPatient = JsonUtility.FromJson<Patient> (jsonString);
+
 		panelPatient.Populate (currentPatient);
 		panelDiagnose.patient = currentPatient;
 	}
