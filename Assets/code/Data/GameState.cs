@@ -11,7 +11,7 @@ public class GameState {
 	public int admitted;
 	public int time;
 	public int used_beds;
-	public int dead;
 	public int in_queue;
+	public int dead;
 	public int total_beds;
 }
