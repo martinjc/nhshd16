@@ -4,7 +4,7 @@ from time import sleep
 import numpy as np
 
 defer_time = 120
-end_game = 60 * 12
+end_game = 45 * 1
 bed_limit = 10
 bed_decay = 60
 
