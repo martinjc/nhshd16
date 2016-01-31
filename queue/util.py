@@ -30,11 +30,7 @@ game = Game()
 def create_patients(n):
   global game
 
-<<<<<<< HEAD
-  for i in range(2):
-=======
   for i in range(n):
->>>>>>> ae28b005a0f414f196aae36c281d623b386bd8e4
     patient = dict(generate_patient())
     patient['id'] = str(uuid.uuid4())
     game.all_patients[patient['id']] = patient
@@ -57,11 +53,7 @@ def reset_time():
 
 def increment_time():
   global game
-<<<<<<< HEAD
 
-=======
-
->>>>>>> ae28b005a0f414f196aae36c281d623b386bd8e4
   game.time += tick_rate
   game.real_time += datetime.timedelta(minutes = tick_rate)
   create_patients(random.choice(patient_generation))
@@ -85,13 +77,8 @@ def increment_time():
 
 def get_next_patient():
   global game
-<<<<<<< HEAD
 
   if is_game_ended():
-=======
-
-  if game.is_ended():
->>>>>>> ae28b005a0f414f196aae36c281d623b386bd8e4
     return {'game_ended': True}
 
   for patient_id in game.deferred:

@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour {
 		//issues with JsonUtility prevents deserializing top level arrays
 		hb = JsonUtility.FromJson<Handbook>(responseJson);
 		Debug.Log (hb.symptoms.Count);
+		handbookManager.Populate (hb);
 
 	}
 
