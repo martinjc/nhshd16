@@ -2,43 +2,36 @@ import json, random, threading, uuid
 from patient_gen import generate_patient
 from time import sleep
 
-all_patients = {}
-beds = []
-queue = []
-dismissed = []
-admitted = []
-dead = []
-time = 0
-
-patients_to_generate = 70
+defer_time = 120
 end_game = 60*12
 patients_per_hour = 5
 bed_limit = 10
 bed_decay = 36
 tick_time = 3
 
+class Game:
+  def __init__(self):
+    self.all_patients = {}
+    self.beds = []
+    self.queue = []
+    self.dismissed = []
+    self.deferred = []
+    self.admitted = []
+    self.dead = []
+    self.time = 0
+
+game = Game()
 
 def reset_time():
-  global time
-  global queue
-  global beds
-  global admitted
-  global dismissed
-  global all_patients
+  global game 
 
-  time = 0
+  game = Game()
 
-  all_patients = {}
-  beds = []
-  queue = []
-  admitted = []
-  dismissed = []
-  dead = []
   for i in range(2): 
     patient = dict(generate_patient())
     patient['id'] = str(uuid.uuid4())
-    all_patients[patient['id']] = patient
-    queue.append(patient['id'])
+    game.all_patients[patient['id']] = patient
+    game.queue.append(patient['id'])
   
   def timer():
     while not is_game_ended():
@@ -48,95 +41,93 @@ def reset_time():
   thr.start()
 
 def increment_time():
-  global time
-  global queue
-  global beds
-  global admitted
-  global dismissed
-  global all_patients
+  global game
   
-  time += 5
+  game.time += 5
 
   # check for dead patients
-  for patient in all_patients:
+  for patient in game.all_patients:
     if 'ailment_deadline' in patient and patient['ailment_deadline'] > -1 and 'arrival_time' in patient:
-      if time > (patient['arrival_time'] + patient['ailment_deadline']) and patient['id'] not in admitted:
-        dead.append(patient['id'])
-        queue.remove(patient['id'])
+      if game.time > (patient['arrival_time'] + patient['ailment_deadline']) and patient['id'] not in game.admitted:
+        game.dead.append(patient['id'])
+        game.queue.remove(patient['id'])
 
   # check patients leaving beds
-  for id in beds :
-    if time >= all_patients[id]['arrival_time'] + bed_decay:
-      beds.remove(id)
+  for id in game.beds :
+    if game.time >= game.all_patients[id]['arrival_time'] + bed_decay:
+      game.beds.remove(id)
 
 
 def get_next_patient():  
-  global time
-  global queue
-  global beds
-  global admitted
-  global dismissed
-  global all_patients
-  
-  if time < end_game and len(queue) > 0:
-    patient_id = queue.pop()
-    patient = all_patients[patient_id]
+  global game
+ 
+  if is_game_ended():
+    return {'game_ended': True}
+
+  for patient_id in game.deferred:
+    print patient_id
+    if game.all_patients[patient_id]['deferred_until'] <= game.time:
+      patient_id = game.deferred.pop()
+      return game.all_patients[patient_id]
+ 
+  if len(game.queue) > 0:
+    patient_id = game.queue.pop()
+    patient = game.all_patients[patient_id]
     if 'arrival_time' not in patient:
-      patient['arrival_time'] = time
+      patient['arrival_time'] = game.time
+      patient['deferred'] = False
     return patient
   else:
-    return {'end_game': True}
+    return {}
 
 def defer_patient(id):
-  global queue
-
-  try:
-    queue.insert(patients_per_hour*2, id) # defer 2 hours
-  except:
-    pass
+  global game
+ 
+  game.all_patients[id]['deferred_until'] = game.time + defer_time
+  game.all_patients[id]['deferred'] = True
+  game.deferred.append(id)
   return {'OK': True}
 
 def admit_patient(id):
-  global beds
-  global admitted
+  global game 
 
-  if len(beds) < bed_limit:
-    beds.append(id)
-    admitted.append(id)
+  if len(game.beds) < bed_limit:
+    gaeme.beds.append(id)
+    game.admitted.append(id)
 
-  if len(beds) >= bed_limit:
+  if len(game.beds) >= bed_limit:
     return {'beds_full': True}
   else:
     return {'beds_full': False}
 
 def dismiss_patient(id):
-  global dismissed
+  global game 
 
-  dismissed.append(id)
+  game.dismissed.append(id)
   return {'OK': True}
 
 def game_state():
+  global game
+
   state = {}
-  state['time'] = time
+  state['time'] = game.time
   state['total_time'] = end_game
-  state['admitted'] = len(admitted)
-  state['dismissed'] = len(dismissed)
-  state['in_queue'] = len(queue)
+  state['admitted'] = len(game.admitted)
+  state['deferred'] = len(game.deferred)
+  state['dismissed'] = len(game.dismissed)
+  state['in_queue'] = len(game.queue)
   state['total_beds'] = bed_limit
-  state['used_beds'] = len(beds)
+  state['used_beds'] = len(game.beds)
   
-  if is_game_end():
+  if is_game_ended():
     state['state'] = 'ended'
-    state['dead'] = len(dead)   
-    state['score'] = patients_to_generate - len(dead)
+    state['dead'] = len(game.dead)   
   else:
     state['state'] = 'in play'
    
   return state
 
 def is_game_ended():
-  global time
-  global end_game
+  global game
 
-  return time >= end_game
-  
+  return game.time >= end_game
