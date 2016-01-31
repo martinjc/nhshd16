@@ -27,6 +27,14 @@ def edit(id, action):
     return json.dumps(admit_patient(id))
   return {'Error': True}
 
+@app.route('/handbook/complete')
+def handbook() :
+  return json.dumps(get_handbook())
+
+@app.route('/handbook/by_patient/<id>')
+def handbook_by_patient(id) :
+  return json.dumps(get_handbook(id))
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0', port=5000)

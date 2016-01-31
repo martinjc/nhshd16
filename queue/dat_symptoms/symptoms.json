@@ -1,0 +1,67 @@
+[
+    {
+        "id": 0,
+        "name": "Clamminess",
+        "image": "placeholder"  
+    },
+    {
+        "id": 1,
+        "name": "Central Chest Pain",
+        "image": "placeholder"
+    },
+    {
+        "id": 2,
+        "name": "Left Arm Pain",
+        "image": "placeholder"
+    },
+    {
+        "id": 3,
+        "name": "Runny Nose",
+        "image": "placeholder"
+    },
+    {
+        "id": 4,
+        "name": "Aches",
+        "image": "placeholder"
+    },
+    {
+        "id": 5,
+        "name": "High Temperature",
+        "image": "placeholder"
+    },
+    {
+        "id": 6,
+        "name": "Red Eyes",
+        "image": "placeholder"
+    },
+    {
+        "id": 7,
+        "name": "Headache",
+        "image": "placeholder"
+    },
+    {
+        "id": 8,
+        "name": "Slurred Speech",
+        "image": "placeholder"
+    },
+    {
+        "id": 9,
+        "name": "Poor Coordination",
+        "image": "placeholder"
+    },
+    {
+        "id": 10,
+        "name": "Vomiting",
+        "image": "placeholder"
+    },
+    {
+        "id": 11,
+        "name": "Photophobia",
+        "image": "placeholder"
+    },
+    {
+        "id": 12,
+        "name": "Facial Droop",
+        "image": "placeholder"
+    }
+]

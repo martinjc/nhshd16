@@ -1,5 +1,5 @@
 import json, random, threading, uuid
-from patient_gen import generate_patient
+from patient_gen import generate_patient, generate_handbook
 from time import sleep
 
 defer_time = 120
@@ -112,6 +112,13 @@ def dismiss_patient(id):
 
   game.dismissed.append(id)
   return {'OK': True}
+
+def get_handbook(patient_id=None):
+  handbook = generate_handbook()
+  if patient_id :
+    patient = all_patients[patient_id]
+    return filter(lambda el: el['symptom'] in patient['symptoms'], handbook)
+  return handbook
 
 def game_state():
   global game

@@ -23,6 +23,12 @@ def load_ailments():
         dat = json.load(f)
         return dat
 
+@lru_cache(None)
+def load_symptoms():
+    fp = './dat_symptoms/symptoms.json'
+    with open(fp) as f:
+        dat = json.load(f)
+        return dat
 
 @lru_cache(None)
 def load_names():
@@ -61,7 +67,6 @@ def generate_skeleton():
         ('photo_fpath', photo_fp), ('photo_fname', photo_fname)])
     return dat
 
-
 def generate_ailment():
     ails = load_ailments()
     ail = random.choice(ails)
@@ -88,3 +93,19 @@ def generate_patient():
     dat['ailment_deadline'] = ail['ailment_deadline']
     dat['symptoms'] = select_symptoms(ail['symptoms'])
     return dat
+
+def generate_handbook():
+
+  handbook = []
+  symptoms = load_symptoms()
+  ailments = load_ailments()
+
+  for symptom in symptoms :
+    symptom_name = symptom['name']
+    causes = []
+    for ailment in ailments :
+      if symptom['name'] in map(lambda obj: obj['name'], ailment['symptoms']) :
+        causes.append(ailment['ailment_name'])
+
+    handbook.append({'name' : symptom_name, 'causes' : causes})
+  return handbook
