@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	private GameState currentGameState;
 
+	[SerializeField]
+	HandbookManager handbookManager;
+
 	private Patient currentPatient;
 
 	private const string DEBUG_HOST = "127.0.0.1:5000";
@@ -24,10 +27,31 @@ public class GameManager : MonoBehaviour {
 		string url = DEBUG_HOST + "/" + aspect + "/" + method;
 		new WWW(url);
 		GetNewPatient();
+
+		//DEBUG
+		Handbook handbook = new Handbook();
+		handbook.symptoms = new List<Symptom> ();
+		for (int i = 0; i < Random.Range(3, 9); ++i) {
+			Symptom symptom = new Symptom ();
+			symptom.Name = "Symptom " + i.ToString();
+
+			symptom.causes = new List<string> ();
+			for (int j = 0; j < Random.Range(2, 7); ++j) {
+				symptom.causes.Add ("Cause " + j.ToString ());
+			}
+
+			handbook.symptoms.Add (symptom);
+		}
+
+		PopulateHandbook (handbook);
 	}
 
 	public void EndGame() {
-		Debug.Log ("We're Done. FUCK JON");
+		Debug.Log ("We're Done. Fuck Martin.");
+	}
+
+	public void PopulateHandbook(Handbook handbook){
+		handbookManager.Populate (handbook);
 	}
 
 	public void GetNewPatient(){
@@ -70,6 +94,9 @@ public class GameManager : MonoBehaviour {
 		string aspect = "patients";
 		string url = DEBUG_HOST + "/" + aspect + "/" + currentPatient.id + "/" + action;
 		new WWW(url);
+		WWWForm wwwForm = new WWWForm ();
+		wwwForm.AddField ("test", "true");
+		new WWW(url, wwwForm);
 	}
 
 	IEnumerator CallStateEndpoint() {
