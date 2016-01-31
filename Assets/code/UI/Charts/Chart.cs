@@ -7,19 +7,46 @@ public class Chart : MonoBehaviour {
 	private ChartItem chartItemPrefab;
 
 	public void Set(int totalItems, int filledItems){
-		Debug.Log ("Updating charts.");
-		int changeInTotal = -(transform.childCount - totalItems);
+		//Debug.Log ("Updating charts =  " + totalItems + "," + filledItems);
+		//int changeInTotal = (transform.childCount - totalItems);
 
-		Debug.Log ("Change = " + changeInTotal);
 
-		if (changeInTotal < 0) {
-			for (int i = 0; i < Mathf.Abs(changeInTotal); ++i) {
-				RemoveItem ();
-			}
-		} else {
-			for (int i = 0; i < changeInTotal; ++i) {
+
+		//Debug.Log ("Change = " + changeInTotal);
+
+		int currentCount = transform.childCount;
+
+		Debug.Log ("Current count = " + currentCount);
+		Debug.Log ("Total items = " + totalItems);
+
+
+		if (currentCount < totalItems) {
+			while(currentCount < totalItems){
 				AddItem ();
+				currentCount++;
 			}
+		} else if(currentCount > totalItems){
+			while(currentCount > totalItems){
+				RemoveItem ();
+				currentCount--;
+			}
+		}
+
+		Coloring (filledItems);
+	}
+
+	private void Coloring(int colouredItems){
+		foreach (Transform child in transform) {
+			child.GetComponent<ChartItem> ().SetEmpty ();
+		}
+
+		int index = 0;
+		foreach (Transform child in transform) {
+			if (index >= colouredItems) {
+				break;
+			}
+			child.GetComponent<ChartItem> ().SetFull ();
+			index++;
 		}
 	}
 

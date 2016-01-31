@@ -104,8 +104,11 @@ public class GameManager : MonoBehaviour {
 
 	public void AcceptPatient(){
 		//Tell web service to accept the patient
-		ProcessPatient("admit");
-		GetNewPatient ();
+
+		if (currentGameState.total_beds - currentGameState.used_beds > 0) {
+			ProcessPatient ("admit");
+			GetNewPatient ();
+		}
 	}
 
 	public void DismissPatient(){
@@ -133,6 +136,8 @@ public class GameManager : MonoBehaviour {
 			EndGame ();
 		}
 
+
+
 		//Update charts
 		patientChart.Set(currentGameState.in_queue, currentGameState.in_queue);
 		bedChart.Set(currentGameState.total_beds, currentGameState.used_beds);
@@ -157,6 +162,7 @@ public class GameManager : MonoBehaviour {
 		string jsonString = www.text;
 		Debug.Log (jsonString);
 		currentPatient = JsonUtility.FromJson<Patient> (jsonString);
+
 		panelPatient.Populate (currentPatient);
 		panelDiagnose.patient = currentPatient;
 	}
