@@ -86,7 +86,7 @@ def get_next_patient():
 
   for patient_id in game.deferred:
     if game.all_patients[patient_id]['deferred_until'] <= game.time:
-      patient_id = game.deferred.pop()
+      game.deferred.remove(patient_id)
       return game.all_patients[patient_id]
 
   if len(game.queue) > 0:
