@@ -214,6 +214,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 11475940}
+  CauseItemPrefab: {fileID: 0}
+  HandbookManager: {fileID: 0}
 --- !u!114 &11471112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -252,7 +254,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: a8f5d12e702fc488faee1151a977cd97, type: 3}
     m_FontSize: 27
     m_FontStyle: 0
     m_BestFit: 1
