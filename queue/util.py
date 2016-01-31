@@ -7,8 +7,8 @@ end_game = 60 * 12
 bed_limit = 10
 bed_decay = 30
 
-patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
-tick_time = 5
+patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+tick_time = 0.1
 tick_rate = 5
 
 class Game:
@@ -61,7 +61,7 @@ def increment_time():
   # check for dead patients
   for patient_id in game.all_patients:
     patient = game.all_patients[patient_id]
-    if patient['ailment_deadline'] > -1 and game.time > (patient['arrival_time'] + patient['ailment_deadline']) and patient['id'] not in game.admitted:
+    if patient['ailment_deadline'] > -1 and game.time > (patient['arrival_time'] + patient['ailment_deadline']) and patient['id'] not in game.admitted and patient['id'] not in game.dead:
         game.dead.append(patient['id'])
         if patient['id'] in game.deferred:
           game.deferred.remove(patient['id'])
@@ -153,6 +153,7 @@ def game_state():
   if game.is_ended():
     state['state'] = 'ended'
     state['dead'] = []
+    state['num_dead'] = len(game.dead)
     score = 0
     score -= 2 * len(game.dead)
     for patient_id in game.admitted:
