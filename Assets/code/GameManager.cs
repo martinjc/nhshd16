@@ -31,17 +31,17 @@ public class GameManager : MonoBehaviour {
 		//DEBUG
 		Handbook handbook = new Handbook();
 		handbook.symptoms = new List<Symptom> ();
-		for (int i = 0; i < Random.Range(3, 9); ++i) {
-			Symptom symptom = new Symptom ();
-			symptom.Name = "Symptom " + i.ToString();
-
-			symptom.causes = new List<string> ();
-			for (int j = 0; j < Random.Range(2, 7); ++j) {
-				symptom.causes.Add ("Cause " + j.ToString ());
-			}
-
-			handbook.symptoms.Add (symptom);
-		}
+//		for (int i = 0; i < Random.Range(3, 9); ++i) {
+//			Symptom symptom = new Symptom ();
+//			symptom.name = "Symptom " + i.ToString();
+//
+//			symptom.causes = new List<string> ();
+//			for (int j = 0; j < Random.Range(2, 7); ++j) {
+//				symptom.causes.Add ("Cause " + j.ToString ());
+//			}
+//
+//			handbook.symptoms.Add (symptom);
+//		}
 
 		PopulateHandbook (handbook);
 	}
@@ -52,7 +52,10 @@ public class GameManager : MonoBehaviour {
 
 	public void PopulateHandbook(Handbook handbook){
 		handbookManager.Populate (handbook);
+		string url = DEBUG_HOST + "/handbook/complete";
+		StartCoroutine (CallHandbookCreationEndpoint (url));
 	}
+		
 
 	public void GetNewPatient(){
 		if (stillPlaying ()) {
@@ -107,6 +110,17 @@ public class GameManager : MonoBehaviour {
 		if(currentGameState.state == "ended"){
 			EndGame ();
 		}
+	}
+
+	IEnumerator CallHandbookCreationEndpoint(string url) {
+		WWW www = new WWW(url);
+		yield return www;
+		string responseJson = www.text;
+		Debug.Log (responseJson);
+//		Debug.Log (JsonUtility.ToJson(responseJson,true));
+		//issues with JsonUtility prevents deserializing into an array
+//		Handbook hb = JsonUtility.FromJson<Handbook>(responseJson);
+
 	}
 
 	IEnumerator CallPatientCreationEndpoint(string url) {

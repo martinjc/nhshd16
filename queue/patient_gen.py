@@ -108,4 +108,5 @@ def generate_handbook():
         causes.append(ailment['ailment_name'])
 
     handbook.append({'name' : symptom_name, 'causes' : causes})
+    print handbook
   return handbook

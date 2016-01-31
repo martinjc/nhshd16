@@ -32,7 +32,7 @@ public class HandbookSymptomListItem : MonoBehaviour {
 		}
 		set{
 			symptom = value;
-			nameText.text = symptom.Name;
+			nameText.text = symptom.name;
 		}
 	}
 
