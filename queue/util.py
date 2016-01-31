@@ -3,11 +3,13 @@ from patient_gen import generate_patient
 from time import sleep
 
 defer_time = 120
-end_game = 60*12
-patients_per_hour = 5
+end_game = 60 * 12
 bed_limit = 10
-bed_decay = 36
-tick_time = 3
+bed_decay = 30
+
+patient_generation = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1]
+tick_time = 5
+tick_rate = 5
 
 class Game:
   def __init__(self):
@@ -22,17 +24,21 @@ class Game:
 
 game = Game()
 
-def reset_time():
-  global game 
-
-  game = Game()
+def create_patients(n):
+  global game
 
   for i in range(2): 
     patient = dict(generate_patient())
     patient['id'] = str(uuid.uuid4())
     game.all_patients[patient['id']] = patient
     game.queue.append(patient['id'])
-  
+
+def reset_time():
+  global game 
+
+  game = Game()
+  create_patients(2)
+    
   def timer():
     while not is_game_ended():
       increment_time()
@@ -43,7 +49,8 @@ def reset_time():
 def increment_time():
   global game
   
-  game.time += 5
+  game.time += tick_rate
+  create_patients(random.choice(patient_generation))
 
   # check for dead patients
   for patient in game.all_patients:
